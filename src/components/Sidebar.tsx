@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
@@ -14,7 +13,7 @@ import {
   Truck,
   AlertTriangle,
   Package,
-  Tool,
+  Wrench,
   Building,
   Calendar,
   BarChart4
@@ -111,7 +110,7 @@ const Sidebar: React.FC = () => {
     {
       name: 'Maintenance',
       path: '/maintenance',
-      icon: <Tool size={18} />,
+      icon: <Wrench size={18} />,
       permissions: { doctype: 'Maintenance Schedule', permission: 'read' },
       module: 'Fleet Management',
     },
@@ -157,7 +156,6 @@ const Sidebar: React.FC = () => {
       <div className="flex-1 overflow-y-auto p-4">
         <nav className="space-y-1">
           {menuItems.map((item, index) => {
-            // Skip rendering if user doesn't have required permissions
             const hasRequiredPermission = !item.permissions || 
               hasPermission(item.permissions.doctype, item.permissions.permission);
             

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
-import { Tool, Plus } from 'lucide-react';
+import { Wrench, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
@@ -26,7 +26,7 @@ const Maintenance: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-blue-100 mr-4">
-                <Tool className="h-6 w-6 text-blue-600" />
+                <Wrench className="h-6 w-6 text-blue-600" />
               </div>
               <div>
                 <h3 className="font-medium">Routine Maintenance</h3>
@@ -44,7 +44,7 @@ const Maintenance: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-yellow-100 mr-4">
-                <Tool className="h-6 w-6 text-yellow-600" />
+                <Wrench className="h-6 w-6 text-yellow-600" />
               </div>
               <div>
                 <h3 className="font-medium">Tire Replacement</h3>
@@ -62,7 +62,7 @@ const Maintenance: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-red-100 mr-4">
-                <Tool className="h-6 w-6 text-red-600" />
+                <Wrench className="h-6 w-6 text-red-600" />
               </div>
               <div>
                 <h3 className="font-medium">Engine Overhaul</h3>
