@@ -9,13 +9,15 @@ interface ProtectedRouteProps {
     doctype: string;
     permission: string;
   };
+  requiredModule?: string;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
-  requiredPermission 
+  requiredPermission,
+  requiredModule
 }) => {
-  const { isAuthenticated, hasPermission } = useAuth();
+  const { isAuthenticated, hasPermission, hasModule } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
@@ -25,6 +27,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (
     requiredPermission && 
     !hasPermission(requiredPermission.doctype, requiredPermission.permission)
+  ) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // Check specific module if required
+  if (
+    requiredModule && 
+    !hasModule(requiredModule)
   ) {
     return <Navigate to="/dashboard" replace />;
   }

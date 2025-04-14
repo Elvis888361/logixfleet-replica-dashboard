@@ -158,17 +158,20 @@ const InspectionItem = ({
 };
 
 const Dashboard: React.FC = () => {
-  const { hasPermission } = useAuth();
+  const { hasPermission, hasModule } = useAuth();
   
   const canCreateVehicle = hasPermission('Vehicle', 'create');
   const canCreateDriver = hasPermission('Driver', 'create');
+  const canAccessReports = hasModule('Reports');
+  const canAccessSchedule = hasModule('Fleet Management');
 
   const dashboardActions = [
     {
       title: 'Reports',
       icon: <FileText size={24} className="text-logix-blue" />,
       onClick: () => console.log('Navigate to reports'),
-      requiresPermission: false,
+      requiresPermission: true,
+      permission: canAccessReports,
     },
     {
       title: 'Add Driver',
@@ -181,7 +184,8 @@ const Dashboard: React.FC = () => {
       title: 'Schedule',
       icon: <Calendar size={24} className="text-green-500" />,
       onClick: () => console.log('Schedule'),
-      requiresPermission: false,
+      requiresPermission: true,
+      permission: canAccessSchedule,
     },
     {
       title: 'Add Vehicle',
@@ -197,9 +201,11 @@ const Dashboard: React.FC = () => {
       title="Dashboard" 
       actions={
         <div className="flex gap-2">
-          <Button variant="outline">
-            <FileText className="mr-2 h-4 w-4" /> Reports
-          </Button>
+          {canAccessReports && (
+            <Button variant="outline">
+              <FileText className="mr-2 h-4 w-4" /> Reports
+            </Button>
+          )}
           <Button className="bg-logix-blue hover:bg-blue-700">
             <Activity className="mr-2 h-4 w-4" /> Overview
           </Button>

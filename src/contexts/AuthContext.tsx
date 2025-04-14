@@ -16,6 +16,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   hasPermission: (doctype: string, permission: string) => boolean;
+  hasModule: (moduleName: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -61,6 +62,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem('logixfleet_token', tokenToUse);
       localStorage.setItem('logixfleet_email', email);
       setToken(tokenToUse);
+      
+      // Try to fetch user details, but fallback to dummy data if it fails
+      try {
+        const userDetailsResponse = await fetch(
+          `https://rjlogistics.logixfleetapp.com/api/method/erpnext.api.get_user_details?email=${email}`,
+          {
+            headers: {
+              'Authorization': `token ${tokenToUse}`
+            }
+          }
+        );
+        
+        if (userDetailsResponse.ok) {
+          const userData = await userDetailsResponse.json();
+          if (userData && userData.message) {
+            localStorage.setItem('logixfleet_userData', JSON.stringify(userData.message));
+            setUserData(userData.message);
+            setIsAuthenticated(true);
+            toast.success('Login successful');
+            navigate('/dashboard');
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch user details, using fallback data');
+      }
       
       // Create dummy user data based on the user's request example
       const dummyUserData: UserData = {
@@ -144,9 +171,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     return doctypePermissions.includes(permission);
   };
+  
+  const hasModule = (moduleName: string): boolean => {
+    if (!userData || !userData.modules) return false;
+    return userData.modules.includes(moduleName);
+  };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userData, login, logout, hasPermission }}>
+    <AuthContext.Provider value={{ isAuthenticated, userData, login, logout, hasPermission, hasModule }}>
       {children}
     </AuthContext.Provider>
   );
